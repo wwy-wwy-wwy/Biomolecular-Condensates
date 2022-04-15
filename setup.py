@@ -1,11 +1,11 @@
 from setuptools import setup
 
-setup(name='example',
+setup(name='condensate_speckles',
       version='1.0',
-      description='An example package for Harvard PHYS201',
-      url='http://github.com/phys201/example',
-      author='ralex0',
-      author_email='ralex0@users.noreply.github.com',
+      description='A package that studies the decay behaviour of FUS protein',
+      url='https://github.com/phys201/Condensate_speckles',
+      author='Anqi Chen, Wenyun Wang, Hanyue Wang',
+      author_email='',
       license='GPLv3',
-      packages=['example'],
-      install_requires=['numpy'])
+      packages=['condensate_speckle'],
+      install_requires=['pymc3'])
