@@ -6,15 +6,15 @@ import math
 
 class TestIo(TestCase):
     def test_data_io(self): 
-        data = load_data('simulated_data.csv',data_dir='../example_data').to_numpy()
+        data = load_data('simulated_data.csv',data_dir='condensate_speckle/example_data').to_numpy()
         assert data[0,0]==0
         
     def test_data_mean(self):
-        mean, variance = analyze_data('simulated_data.csv',data_dir='../example_data')
+        mean, variance = analyze_data('simulated_data.csv',data_dir='condensate_speckle/example_data')
         assert np.allclose(mean, 83.3, rtol=0, atol=1)
         
     def test_data_mean2(self):
-        mean, variance = analyze_data('test.csv',data_dir='../example_data')
-        data = load_data('test.csv',data_dir='../example_data').to_numpy()
+        mean, variance = analyze_data('test.csv',data_dir='condensate_speckle/example_data')
+        data = load_data('test.csv',data_dir='condensate_speckle/example_data').to_numpy()
         meta_mean = data[3,1]
         assert np.allclose(mean, meta_mean, rtol=0, atol=1)
