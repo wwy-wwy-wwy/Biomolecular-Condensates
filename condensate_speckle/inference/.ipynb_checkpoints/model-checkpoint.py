@@ -19,10 +19,7 @@ def set_model(data,quantization):
         precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 1) 
         # process mean
         center = pm.Uniform("center", lower = 0, upper = quantization) # this is the mean of normalized data
-        # Camera noise
-        noise = pm.Normal("camera", mu=5, sigma=1)
    
-    
         likelihood = pm.AR1("y", k=stationarity, tau_e=precision_AR1, observed = data[1] - center)
 
     return ar1_model
