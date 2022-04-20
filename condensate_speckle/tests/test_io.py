@@ -11,6 +11,6 @@ class TestIo(TestCase):
         
     def test_data_mean(self):
         mean, variance = analyze_data('simulated_data.csv',data_dir='../example_data')
-        assert np.allclose(mean, 85.386, rtol=0, atol=1)
+        assert np.allclose(mean, 83.3, rtol=0, atol=1)
         
     
