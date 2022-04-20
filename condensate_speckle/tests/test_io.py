@@ -1,5 +1,5 @@
 from unittest import TestCase
-from condensate_speckle.data_io import get_example_data_file_path, load_data
+from condensate_speckle.data_io import get_example_data_file_path, load_data, analyze_data
 import pandas as  pd
 import numpy as np
 
