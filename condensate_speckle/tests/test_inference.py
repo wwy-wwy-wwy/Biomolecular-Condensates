@@ -2,6 +2,12 @@ from condensate_speckle.data_io import get_example_data_file_path,load_data
 from condensate_speckle.inference.model import set_model
 import numpy as np
 
+from matplotlib import pyplot as plt
+import pymc3 as pm
+import arviz as az
+import statsmodels.api as sm
+import csv
+
 import unittest
 from unittest import TestCase
 
