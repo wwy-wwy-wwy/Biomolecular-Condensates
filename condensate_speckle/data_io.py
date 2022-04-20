@@ -21,5 +21,5 @@ def load_data(filename, data_dir):
 
 def analyze_data(filename, data_dir):
     data_file=get_example_data_file_path(filename,data_dir)
-    data = pd.read_csv(data_file, header=None).to_numpy()
+    data = pd.read_csv(data_file, header=None, nrows=2).to_numpy()
     return np.mean(data[1]), np.std(data[1])
