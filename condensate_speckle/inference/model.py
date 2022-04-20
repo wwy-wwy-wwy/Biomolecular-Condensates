@@ -1,7 +1,7 @@
 import numpy as np
 import pymc3 as pm
 
-def set_model(data):
+def set_model(data,quantization):
     
     """
     This function read in the experiment data, and generate an autoregressive model based on it.
