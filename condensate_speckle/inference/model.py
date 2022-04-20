@@ -10,7 +10,6 @@ def set_model(data,quantization):
     return: AR1 model
     This function read in the experiment data, and generate an autoregressive model based on it.
     """
-    
     #precision_upper = 10/(np.var(data)*(1-np.exp(-2/10)))
     
     ar1_model = pm.Model()

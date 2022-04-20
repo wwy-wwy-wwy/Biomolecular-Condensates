@@ -15,6 +15,9 @@ from unittest import TestCase
 class TestModel(TestCase):
     
     def test_model(self):
+        """
+        reads in data and run in the set up model, checks if MAP decay time matches.
+        """
         data = load_data('simulated_data.csv',data_dir='condensate_speckle/example_data').to_numpy()
         quantization=255
         ar1_model=set_model(data,quantization)

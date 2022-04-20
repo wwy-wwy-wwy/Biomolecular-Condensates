@@ -5,6 +5,13 @@ import math
 
 
 def get_example_data_file_path(filename, data_dir='example_data'):
+    """
+       input:
+       filename: string
+       data_dir: string
+       return:
+       data_path: string
+    """
     # Path.cwd() returns the location of the source file currently in use (so
     # in this case io.py). We can use it as base path to construct
     # other paths from that should end up correct on other machines or
@@ -16,10 +23,24 @@ def get_example_data_file_path(filename, data_dir='example_data'):
 
 
 def load_data(filename, data_dir):
+    """
+       input:
+       filename: string
+       data_dir: string
+       return:
+       data
+    """
     data_file=get_example_data_file_path(filename,data_dir)
     return pd.read_csv(data_file, header=None)
 
 def analyze_data(filename, data_dir):
+    """
+       input:
+       filename: string
+       data_dir: string
+       return:
+       mean and standard deviation of data
+    """
     data_file=get_example_data_file_path(filename,data_dir)
     data = pd.read_csv(data_file, header=None, nrows=2).to_numpy()
     return np.mean(data[1]), np.std(data[1])
