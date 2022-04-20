@@ -6,4 +6,4 @@ class TestIo(TestCase):
     def test_data_io(self):
         
         data = load_data('simulated_data.csv',data_dir='../example_data')
-        assert data[1,0]>73 
+        assert data[0,0]==0
