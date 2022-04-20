@@ -4,6 +4,10 @@ import pymc3 as pm
 def set_model(data,quantization):
     
     """
+    input: 
+    data: ndarray, 
+    quantization: float
+    return: AR1 model
     This function read in the experiment data, and generate an autoregressive model based on it.
     """
     

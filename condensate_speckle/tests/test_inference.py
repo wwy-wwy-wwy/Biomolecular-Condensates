@@ -13,6 +13,7 @@ from unittest import TestCase
 
 
 class TestModel(TestCase):
+    
     def test_model(self):
         data = load_data('simulated_data.csv',data_dir='../example_data').to_numpy()
         quantization=255
