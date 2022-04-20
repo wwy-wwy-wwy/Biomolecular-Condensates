@@ -23,6 +23,6 @@ def set_model(data):
         noise = pm.Normal("camera", mu=5, sigma=1)
    
     
-        likelihood = pm.AR1("y", k=stationarity, tau_e=precision_AR1, observed = X_simulated_data - center)
+        likelihood = pm.AR1("y", k=stationarity, tau_e=precision_AR1, observed = data[1] - center)
 
     return ar1_model

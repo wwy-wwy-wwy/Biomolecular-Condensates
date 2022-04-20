@@ -6,6 +6,7 @@ import numpy as np
 class TestIo(TestCase):
     def test_data_io(self): 
         data = load_data('simulated_data.csv',data_dir='../example_data').to_numpy()
+        
         assert data[0,0]==0
         
     def test_data_mean(self):
