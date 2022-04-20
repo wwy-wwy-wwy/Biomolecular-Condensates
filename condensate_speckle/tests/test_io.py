@@ -17,4 +17,4 @@ class TestIo(TestCase):
         mean, variance = analyze_data('test.csv',data_dir='../example_data')
         data = load_data('test.csv',data_dir='../example_data').to_numpy()
         meta_mean = data[3,1]
-        assert np.allclose(85, meta_mean, rtol=0, atol=1)
+        assert np.allclose(mean, meta_mean, rtol=0, atol=1)
