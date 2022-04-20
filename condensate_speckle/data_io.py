@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import numpy as np
 
 
 def get_example_data_file_path(filename, data_dir='example_data'):
@@ -9,9 +10,10 @@ def get_example_data_file_path(filename, data_dir='example_data'):
     # when the package is installed
     current_directory = Path.cwd()
     data_path = Path(current_directory, data_dir, filename)
+    print(data_path)
     return data_path
 
 
-def load_data(data_file):
-    data=pd.read_csv(data_file, sep=' ').to_numpy()
-    return data
+def load_data(filename,data_dir):
+    data_file=get_example_data_file_path(filename,data_dir)
+    return pd.read_csv(data_file, header=None)
