@@ -15,7 +15,7 @@ def set_model(data):
         # 'phi'is ln(-1/tau) used in our generative model
         decay_time = pm.Uniform("decay_time",lower = 0, upper = 50) 
         stationarity = np.exp(-1/decay_time)
-        # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by  intensity_mean squared
+        # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
         precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 1) 
         # process mean
         center = pm.Uniform("center", lower = 0, upper = quantization) # this is the mean of normalized data

@@ -1,18 +1,16 @@
-from example.inference.prior import UniformPrior, JefferysPrior
-
+from condensate_speckle.data_io import get_example_data_file_path,load_data
+from condensate_speckle.inference.model import set_model
 import numpy as np
 
 import unittest
 from unittest import TestCase
 
 
-class TestPriors(TestCase):
-    def test_uniform(self):
+class TestModel(TestCase):
+    def test_model(self):
+        data = load_data(get_example_data_file_path('example_data.txt'))
+        set_model(data)
         assert np.allclose(np.exp(UniformPrior(3, 5).logp(4)), .5)
-
-    def test_jefferys(self):
-        assert np.allclose(np.exp(JefferysPrior(10, 1000).logp(100)),
-                           0.0021714724095162588)
 
 if __name__ == '__main__':
     unittest.main()
