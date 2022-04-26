@@ -19,14 +19,3 @@ class UniformPrior(Prior):
         return np.where(
             np.logical_and(x <= self.xmax, x >= self.xmin),
             -log(self.xmax - self.xmin), -np.inf)
-
-
-class JefferysPrior(Prior):
-    """
-    Returns the value of the Jefferys prior at position x for range xmin to xmax
-    """
-
-    def logp(self, x):
-        return np.where(
-            np.logical_and(x <= self.xmax, x >= self.xmin),
-            -log(x) - log(log(self.xmax / self.xmin)), -np.inf)
