@@ -31,7 +31,7 @@ def load_data(filename, data_dir):
        data
     """
     data_file=get_example_data_file_path(filename,data_dir)
-    return pd.read_csv(data_file, header=None)
+    return pd.read_csv(data_file, header=None, nrows=2)
 
 def analyze_data(filename, data_dir):
     """
