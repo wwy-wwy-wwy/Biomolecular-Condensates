@@ -26,7 +26,7 @@ class TestIo(TestCase):
         """
         mean, variance = analyze_data('simulated_data_w_meta.csv',data_dir='condensate_speckle/example_data')
         data = load_data('simulated_data_w_meta.csv',data_dir='condensate_speckle/example_data').to_numpy()
-        meta_mean = data[3,1]
+        meta_mean = float(data[3,1])
         assert np.allclose(mean, meta_mean, rtol=0, atol=1)
         
     def test_uniform_prior(self):
