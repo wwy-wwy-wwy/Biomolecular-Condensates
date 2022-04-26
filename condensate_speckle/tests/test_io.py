@@ -1,5 +1,6 @@
 from unittest import TestCase
 from condensate_speckle.data_io import get_example_data_file_path, load_data, analyze_data
+from condensate_speckle.inference.prior import UniformPrior
 import pandas as  pd
 import numpy as np
 import math
@@ -27,3 +28,10 @@ class TestIo(TestCase):
         data = load_data('simulated_data_w_meta.csv',data_dir='condensate_speckle/example_data').to_numpy()
         meta_mean = data[3,1]
         assert np.allclose(mean, meta_mean, rtol=0, atol=1)
+        
+    def test_uniform_prior(self):
+        """
+        This function test the priors
+        """
+        p = np.exp(UniformPrior(0, 1).logp(0.5))
+        assert np.allclose(p, 1)
