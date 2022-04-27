@@ -24,7 +24,9 @@ def set_model(data,quantization):
         # process mean: use observed mean since process is assumed to be stationary, and there should be
         # weak correlation with the other parameters anyway
         observed_mean = np.mean(data)   
-        camera_noise_std=8.787413879857576
+        #camera_noise_std=8.787413879857576
+        camera_noise_std = pm.Uniform("noise_std", lower=0, upper=255)
+        
         true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
         likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std, observed=data)
         
