@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 .DS_Store
 .ipynb_checkpoint
+.cpython-39.pyc
