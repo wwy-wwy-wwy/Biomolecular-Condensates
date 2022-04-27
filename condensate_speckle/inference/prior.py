@@ -13,9 +13,12 @@ class Prior:
 
 class UniformPrior(Prior):
     """
-    Returns the value of the uniform prior at position x for range xmin to xmax
+    Returns the value of the uniform prior at position x for a range from xmin to xmax
     """
     def logp(self, x):
+        """
+        Calculate log probablity of a certain point according the prior
+        """
         return np.where(
             np.logical_and(x <= self.xmax, x >= self.xmin),
             -log(self.xmax - self.xmin), -np.inf)

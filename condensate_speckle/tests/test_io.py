@@ -31,7 +31,7 @@ class TestIo(TestCase):
         
     def test_uniform_prior(self):
         """
-        This function test the priors
+        This function test the unifrom prior
         """
         p = np.exp(UniformPrior(0, 1).logp(0.5))
         assert np.allclose(p, 1)
