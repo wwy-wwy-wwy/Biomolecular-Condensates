@@ -4,8 +4,17 @@ from condensate_speckle.inference.prior import UniformPrior
 import pandas as  pd
 import numpy as np
 import math
+import condensate_speckle
 
 class TestIo(TestCase):
+    def test_package(self):
+        """
+        This function tests package load in
+        """
+        s = condensate_speckle.test()
+        self.assertTrue(isinstance(s, str))
+
+        
     def test_data_io(self): 
         """
         This function tests data read in.
