@@ -2,6 +2,7 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 import math
+from matplotlib import pyplot as plt
 
 
 def get_example_data_file_path(filename, data_dir='example_data'):
@@ -24,14 +25,21 @@ def get_example_data_file_path(filename, data_dir='example_data'):
 
 def load_data(filename, data_dir):
     """
-       input:
-       filename: string
-       data_dir: string
-       return:
-       data
+    input:
+    ----------
+    filename: string
+    data_dir: string
+    ----------
+    return:
+    pandas data frame, time points, intensity data
     """
     data_file=get_example_data_file_path(filename,data_dir)
-    return pd.read_csv(data_file, header=None)
+    X = pd.read_csv(data_file, header=None).to_numpy()
+    data_pds={'t':X[0],'Intensity':X[1]}
+    dataframe=pd.DataFrame(data_pds)
+    plt.plot(dataframe['t'],dataframe['Intensity'])
+    
+    return dataframe
 
 def analyze_data(filename, data_dir):
     """
