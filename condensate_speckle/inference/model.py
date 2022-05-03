@@ -32,12 +32,12 @@ def set_model(data,quantization):
 
     return ar1_model
     
-def set_double_scale_model(data, quantization,tao1):
+def set_double_scale_model(data, quantization):
     ar1_two_timescales_model = pm.Model()
 
     with ar1_two_timescales_model:
         # 'phi'is ln(-1/tau) used in our generative model
-        decay_time1 = pm.Uniform("decay_time_1",lower = 0, upper = 500, testval=tao1) 
+        decay_time1 = pm.Uniform("decay_time_1",lower = 0, upper = 500) 
         decay_time_split = pm.Uniform("decay_time_split",lower = 0, upper = 500)
         decay_time2 = pm.Deterministic("decay_time_2",decay_time1 + decay_time_split)
     
