@@ -138,7 +138,7 @@ def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision
     '''
     
     if n_time_scale == 2:
-        var_names = ['decay_time_1', 'decay_time_2', 'precision_1', 'precision_2']
+        var_names = ['decay_time_1', 'decay_time_2', 'precision_1', 'precision_2','noise_std']
     
     az.plot_posterior(
     trace,
