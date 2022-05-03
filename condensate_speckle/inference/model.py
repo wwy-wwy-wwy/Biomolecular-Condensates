@@ -1,15 +1,22 @@
 import numpy as np
 import pymc3 as pm
+import arviz as az
 
 def set_model(data,quantization):
     
-    """
+    '''
+    This function read in the experiment data, and generate an AR1 model based on it.
+    
     input: 
+    -----------------
     data: ndarray, 
     quantization: float
-    return: AR1 model
-    This function read in the experiment data, and generate an autoregressive model based on it.
-    """
+    
+    return: 
+    -----------------
+    AR1 model
+    
+    '''
 
     # Bayesian parameter estimation with pymc3
     ar1_model = pm.Model()
@@ -31,8 +38,23 @@ def set_model(data,quantization):
         
 
     return ar1_model
-    
+               
+
 def set_double_scale_model(data, quantization):
+    '''
+    This function read in the experiment data, and generate a two-timescale AR1 model based on it.
+    
+    input: 
+    -----------------
+    data: ndarray, 
+    quantization: float
+    
+    return: 
+    -----------------
+    two-timescale AR1 model
+    
+    '''
+    
     ar1_two_timescales_model = pm.Model()
 
     with ar1_two_timescales_model:
@@ -60,4 +82,65 @@ def set_double_scale_model(data, quantization):
         likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std, observed=data)
         
     return ar1_two_timescales_model
+
+
+def run_model(model, draws = 1000, tune = 2000, init = "advi+adapt_diag", RANDOM_SEED = 10787):
+    '''
+    This function conducts sampling with Pymc3.
     
+    Input parameters:
+    -------------------
+    model: pymc3 model
+    draws: 
+    tune:
+    init:
+    
+    Output parameters:
+    -------------------
+    trace and idata 
+    '''
+    
+    with model:
+        trace = pm.sample(draws, tune=tune, init=init, random_seed=RANDOM_SEED)
+        idata = az.from_pymc3(trace)            
+    return trace, idata
+
+
+def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision','noise_std']):
+    '''
+    This function plot the traces of sampling from the single or the multiple time scale model
+    
+    Input parameters:
+    -------------------
+    trace:
+    n_time_scale: int, 1 or 2, determines the parameters of which the sampling results are plotted
+    
+    '''
+    if n_time_scale == 2:
+        var_names = ['decay_time_1', 'decay_time_2', 'precision_1', 'precision_2']
+    
+    az.plot_trace(
+    trace,
+    var_names = var_names
+);
+    
+    
+    
+def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision','noise_std']):
+    '''
+    This function plots the posterior of sampling from the single or the multiple time scale model
+    
+    Input parameters:
+    -------------------
+    trace:
+    n_time_scale: int, 1 or 2, determines the parameters of which the sampling results are plotted
+    
+    '''
+    
+    if n_time_scale == 2:
+        var_names = ['decay_time_1', 'decay_time_2', 'precision_1', 'precision_2']
+    
+    az.plot_posterior(
+    trace,
+    var_names = var_names
+);
