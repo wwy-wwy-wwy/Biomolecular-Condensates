@@ -50,7 +50,7 @@ def set_double_scale_model(data, quantization):
     
         # process mean: use observed mean since process is assumed to be stationary, and there should be
         # weak correlation with the other parameters anyway
-        observed_mean = np.mean(X_simulated_data)
+        observed_mean = np.mean(data)
         
         #camera_noise_std=8.787413879857576
         camera_noise_std = pm.Uniform("noise_std", lower=0, upper=quantization)
