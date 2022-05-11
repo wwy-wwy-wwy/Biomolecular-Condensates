@@ -149,7 +149,7 @@ def run_model(model, draws = 1000, tune = 2000, init = "advi+adapt_diag", RANDOM
     
     Output parameters:
     -------------------
-    trace and idata 
+    trace 
     '''
     
     with model:
