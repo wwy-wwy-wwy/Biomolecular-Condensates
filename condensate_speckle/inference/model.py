@@ -2,6 +2,44 @@ import numpy as np
 import pymc3 as pm
 import arviz as az
 
+def set_2h_model(data,quantization):
+    
+    '''
+    This function read in the experiment data, and generate an AR1 model based on it.
+    
+    input: 
+    -----------------
+    data: ndarray, 
+    quantization: float
+    
+    return: 
+    -----------------
+    AR1 model
+    
+    '''
+
+    # Bayesian parameter estimation with pymc3
+    ar1_model = pm.Model()
+
+    with ar1_model:
+        # 'phi'is ln(-1/tau) used in our generative model
+        decay_time = pm.Exponential("decay_time", lam=1) 
+        stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
+
+        # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
+        precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 10) 
+
+        # process mean: use observed mean since process is assumed to be stationary, and there should be
+        # weak correlation with the other parameters anyway
+        observed_mean = np.mean(data)
+        camera_noise_std_mean = np.sqrt(data)
+    
+        true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
+        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std_mean, observed=data)
+        
+
+    return ar1_model
+
 def set_model(data,quantization):
     
     '''
@@ -23,20 +61,19 @@ def set_model(data,quantization):
 
     with ar1_model:
         # 'phi'is ln(-1/tau) used in our generative model
-        decay_time = pm.Uniform("decay_time",lower = 0, upper = 5000) 
+        decay_time = pm.Uniform("decay_time", lower=0,upper=1.5*len(data)) 
         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
 
         # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
         precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 10) 
+
         # process mean: use observed mean since process is assumed to be stationary, and there should be
         # weak correlation with the other parameters anyway
-        observed_mean = np.mean(data)   
-        #camera_noise_std=8.787413879857576
-        camera_noise_std_mean = np.sqrt(observed_mean)*0.71
-        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+        observed_mean = np.mean(data)
+        camera_noise_std_mean = np.sqrt(data)
     
         true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
-        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std, observed=data)
+        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std_mean, observed=data)
         
 
     return ar1_model
@@ -76,14 +113,12 @@ def set_double_scale_model(data, quantization):
         # weak correlation with the other parameters anyway
         observed_mean = np.mean(data)
         
-        #camera_noise_std=8.787413879857576
-        #camera_noise_std = pm.Uniform("noise_std", lower=0, upper=quantization)
-        camera_noise_std_mean = np.sqrt(observed_mean)*0.71
-        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+        observed_mean = np.mean(data)
+        camera_noise_std_mean = np.sqrt(data)
     
         true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
         true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
-        likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std, observed=data)
+        likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
         
     return ar1_two_timescales_model
 
@@ -121,14 +156,13 @@ def set_single_precision_model(data,quantization):
         # process mean: use observed mean since process is assumed to be stationary, and there should be
         # weak correlation with the other parameters anyway
         observed_mean = np.mean(data)   
-        #camera_noise_std is a normal distribution centered at somewh
-        camera_noise_std_mean = np.sqrt(observed_mean)*0.71
-        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+        observed_mean = np.mean(data)
+        camera_noise_std_mean = np.sqrt(data)
     
         true1 = pm.AR1("y_1", stationarity, tau_e=precision_AR1, shape=len(data))
         true2 = pm.AR1("y_2", stationarity2, tau_e=precision_AR1, shape=len(data))  
     
-        likelihood = pm.Normal("likelihood", mu=(true1 + true2 + observed_mean), sigma=camera_noise_std, observed=data)
+        likelihood = pm.Normal("likelihood", mu=(true1 + true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
         
     return ar1_new_model
 
@@ -155,7 +189,7 @@ def run_model(model, draws = 1000, tune = 2000, init = "advi+adapt_diag", RANDOM
     return trace
 
 
-def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision','noise_std']):
+def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision']):
     '''
     This function plot the traces of sampling from the single or the multiple time scale model
     
@@ -166,7 +200,7 @@ def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision','n
     
     '''
     if n_time_scale == 2:
-        var_names = ['decay_time_1', 'decay_time_2', 'precision', 'noise_std']
+        var_names = ['decay_time_1', 'decay_time_2', 'precision']
     
     az.plot_trace(
     trace,
@@ -174,7 +208,7 @@ def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision','n
 );
     
     
-def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision','noise_std']):
+def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision']):
     '''
     This function plots the posterior of sampling from the single or the multiple time scale model
     
@@ -186,7 +220,7 @@ def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision
     '''
     
     if n_time_scale == 2:
-        var_names = ['decay_time_1', 'decay_time_2', 'precision','noise_std']
+        var_names = ['decay_time_1', 'decay_time_2', 'precision']
     
     az.plot_posterior(
     trace,
