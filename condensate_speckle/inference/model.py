@@ -2,47 +2,47 @@ import numpy as np
 import pymc3 as pm
 import arviz as az
 
-<<<<<<< Updated upstream
-def set_2h_model(data,quantization):
-    
-    '''
-    This function read in the experiment data, and generate an AR1 model based on it.
-    
-    input: 
-    -----------------
-    data: ndarray, 
-    quantization: float
-    
-    return: 
-    -----------------
-    AR1 model
-    
-    '''
 
-    # Bayesian parameter estimation with pymc3
-    ar1_model = pm.Model()
-
-    with ar1_model:
-        # 'phi'is ln(-1/tau) used in our generative model
-        decay_time = pm.Exponential("decay_time", lam=1) 
-        stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
-
-        # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
-        precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 10) 
-
-        # process mean: use observed mean since process is assumed to be stationary, and there should be
-        # weak correlation with the other parameters anyway
-        observed_mean = np.mean(data)
-        camera_noise_std_mean = np.sqrt(data)
+# def set_2h_model(data,quantization):
     
-        true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
-        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std_mean, observed=data)
+#     '''
+#     This function read in the experiment data, and generate an AR1 model based on it.
+    
+#     input: 
+#     -----------------
+#     data: ndarray, 
+#     quantization: float
+    
+#     return: 
+#     -----------------
+#     AR1 model
+    
+#     '''
+
+#     # Bayesian parameter estimation with pymc3
+#     ar1_model = pm.Model()
+
+#     with ar1_model:
+#         # 'phi'is ln(-1/tau) used in our generative model
+#         decay_time = pm.Exponential("decay_time", lam=1) 
+#         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
+
+#         # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
+#         precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 10) 
+
+#         # process mean: use observed mean since process is assumed to be stationary, and there should be
+#         # weak correlation with the other parameters anyway
+#         observed_mean = np.mean(data)
+#         camera_noise_std_mean = np.sqrt(data)
+    
+#         true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
+#         likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std_mean, observed=data)
         
 
-    return ar1_model
+#     return ar1_model
 
-def set_model(data,quantization):
-=======
+# def set_model(data,quantization):
+# =======
 # def set_2h_model(data,quantization):
     
 #     '''
@@ -82,7 +82,6 @@ def set_model(data,quantization):
 #     return ar1_model
 
 def set_model(data,quantization,aged_time):
->>>>>>> Stashed changes
     
     '''
     This function read in the experiment data, and generate an AR1 model based on it.
@@ -102,15 +101,13 @@ def set_model(data,quantization,aged_time):
     ar1_model = pm.Model()
 
     with ar1_model:
-<<<<<<< Updated upstream
         # 'phi'is ln(-1/tau) used in our generative model
         decay_time = pm.Uniform("decay_time", lower=0,upper=1.5*len(data)) 
-=======
+
         if aged_time=='2h':
             decay_time = pm.Exponential("decay_time", lam=1) 
         else:
             decay_time = pm.Uniform("decay_time", lower=0,upper=1.5*len(data)) 
->>>>>>> Stashed changes
         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
 
         # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
@@ -162,23 +159,23 @@ def set_model(data,quantization,aged_time):
 #         # weak correlation with the other parameters anyway
 #         observed_mean = np.mean(data)
         
-<<<<<<< Updated upstream
-        observed_mean = np.mean(data)
-        camera_noise_std_mean = np.sqrt(data)
-    
-        true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
-        true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
-        likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
-=======
+# <<<<<<< Updated upstream
 #         observed_mean = np.mean(data)
 #         camera_noise_std_mean = np.sqrt(data)
     
 #         true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
 #         true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
 #         likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
->>>>>>> Stashed changes
+# =======
+# #         observed_mean = np.mean(data)
+# #         camera_noise_std_mean = np.sqrt(data)
+    
+# #         true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
+# #         true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
+# #         likelihood = pm.Normal("likelihood", mu=(true1+ true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
+# >>>>>>> Stashed changes
         
-#     return ar1_two_timescales_model
+# #     return ar1_two_timescales_model
 
 
 
