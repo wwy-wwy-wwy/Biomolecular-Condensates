@@ -3,13 +3,32 @@ from matplotlib import pyplot as plt
 import statsmodels.api as sm
 
 def simulate_single_decay_data(number_data_point,tau, quantization, intensity_mean, intensity_std, camera_noise_mean, camera_noise_std):
+    '''
+    This function simulates AR(1) time series data.
+    
+    input: 
+    -----------------
+    number_data_point: int
+    tau: float
+    quantization: int
+    intensity_mean: float
+    intensity_std: float
+    camera_noise_mean: float
+    camera_noise_std: float
+    
+    return: 
+    -----------------
+    simulated data
+    
+    '''
+        
     phi = np.exp(-1/tau)
 
     # A probabilistic generator for the innovation term.
     innovation_mean = intensity_mean*(1-phi) # this is the c term in the wikipedia construction
     innovation_std = intensity_std*np.sqrt(1-phi**2) # this is the standard deviation of the innovation 
     innovation = np.random.normal(loc=0.0, scale=innovation_std, size = number_data_point)
-    intensity_variance = intensity_std**2 # this is the expectation value of all intensity signals
+    intensity_variance = intensity_std**2
 
     print('The set mean of innovation is {}'.format(innovation_mean))
     print('The set std of innovation is {}'.format(innovation_std))
@@ -40,6 +59,26 @@ def simulate_single_decay_data(number_data_point,tau, quantization, intensity_me
     return X_simulated_data, t_simulated
 
 def simulate_double_decay_data(number_data_point,tau_1, tau_2, relative_var, quantization, intensity_mean, intensity_std, camera_noise_mean, camera_noise_std):
+    '''
+    This function simulates AR(1) time series data.
+    
+    input: 
+    -----------------
+    number_data_point: int
+    tau_1: float
+    tau_2: float
+    relative_var: float between 0 and 1, variance of the fast process divided by the sum of the variance of both AR1 processes
+    quantization: int
+    intensity_mean: float
+    intensity_std: float
+    camera_noise_mean: float
+    camera_noise_std: float
+    
+    return: 
+    -----------------
+    simulated data
+    
+    '''
     # Generate simulated data with statsmodel
     # relative variance is variance of the fast process divided by the sum of the variance of both AR1 processes
     # This number will show up in the autocorrelation function as the maginitude of the first jumb
@@ -61,9 +100,6 @@ def simulate_double_decay_data(number_data_point,tau_1, tau_2, relative_var, qua
     ma = np.r_[1] # add zero-lag
     X_statsmodel_generated2 = sm.tsa.arma_generate_sample(ar2, ma, number_data_point, scale=innovation_std2)
 
-    #Relative variance of the intensity std of the fast process 
-    #vs. the variance of the intensity std of the slow process
-
     X = X_statsmodel_generated1 + X_statsmodel_generated2 + intensity_mean
 
     #Add camera noise
@@ -76,7 +112,6 @@ def simulate_double_decay_data(number_data_point,tau_1, tau_2, relative_var, qua
     plt.plot(t_simulated,X_simulated_data,'-')
     plt.xlabel('Time')
     plt.ylabel('Intensity')
-    #plt.ylim([0,quantization])
     plt.show()
 
     X_simulated_data_realmean = np.average(X_simulated_data)
