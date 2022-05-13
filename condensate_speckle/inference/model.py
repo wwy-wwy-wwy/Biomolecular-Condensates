@@ -3,7 +3,7 @@ import pymc3 as pm
 import arviz as az
 
 
-def set_model(data,quantization,aged_time):
+def set_model(data,quantization,aged_time='other'):
     
     '''
     This function read in the experiment data, and generate an AR1 model based on it.
@@ -31,6 +31,8 @@ def set_model(data,quantization,aged_time):
             
             #camera_noise_std = pm.Uniform("noise_std", lower=0,upper = quantization)
         camera_noise_std = np.sqrt(data)/5
+        if aged_time=='simulated':
+             camera_noise_std = 1
         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
 
         # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
@@ -44,7 +46,7 @@ def set_model(data,quantization,aged_time):
                
 
 
-def set_single_precision_model(data,quantization):
+def set_single_precision_model(data,quantization,aged_time='other'):
     
     '''
     This function read in the experiment data, and generate an AR1 model based on it.
@@ -78,6 +80,8 @@ def set_single_precision_model(data,quantization):
         # weak correlation with the other parameters anyway
         observed_mean = np.mean(data)   
         camera_noise_std = np.sqrt(data)/5
+        if aged_time=='simulated':
+            camera_noise_std=3
         #camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
     
         true1 = pm.AR1("y_1", stationarity, tau_e=precision_AR1, shape=len(data))
