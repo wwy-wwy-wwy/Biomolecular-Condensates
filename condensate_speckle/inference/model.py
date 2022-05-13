@@ -26,12 +26,11 @@ def set_model(data,quantization,aged_time):
         observed_mean = np.mean(data)
         if aged_time=='2h':
             decay_time = pm.Exponential("decay_time", lam=1) 
-            camera_noise_std = np.sqrt(data)/5
         else:
             decay_time = pm.Uniform("decay_time", lower=0,upper=1.5*len(data)) 
             
-            camera_noise_std = pm.Uniform("noise_std", lower=0,upper = quantization)
-            
+            #camera_noise_std = pm.Uniform("noise_std", lower=0,upper = quantization)
+        camera_noise_std = np.sqrt(data)/5
         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
 
         # 'precision' is 1/(variance of innovation). As we use normalized data, this term has to be divided by intensity_mean squared
@@ -156,7 +155,7 @@ def run_model(model, draws = 1000, tune = 2000, init = "advi+adapt_diag", RANDOM
     return trace
 
 
-def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision'], aged_time='other'):
+def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision']):
     '''
     This function plot the traces of sampling from the single or the multiple time scale model
     
@@ -168,8 +167,6 @@ def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision'], 
     '''
     if n_time_scale == 2:
         var_names = ['decay_time_1', 'decay_time_2', 'precision']
-    if aged_time=='7h_single' or aged_time=='24_single' or aged_time=='simulated':
-        var_names = ['decay_time_1', 'precision', 'noise_std']
     
     az.plot_trace(
     trace,
@@ -177,7 +174,7 @@ def plot_trace(trace, n_time_scale = 1, var_names = ['decay_time','precision'], 
 );
     
     
-def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision'],aged_time='other'):
+def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision']):
     '''
     This function plots the posterior of sampling from the single or the multiple time scale model
     
@@ -190,9 +187,6 @@ def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision
     
     if n_time_scale == 2:
         var_names = ['decay_time_1', 'decay_time_2', 'precision']
-        
-    if aged_time=='7h_single' or aged_time=='24_single' or aged_time=='simulated':
-        var_names = ['decay_time_1', 'precision', 'noise_std']
     
     az.plot_posterior(
     trace,
@@ -200,7 +194,7 @@ def plot_posterior(trace, n_time_scale = 1, var_names = ['decay_time','precision
 );
   
     
-def plot_pair(trace, n_time_scale = 1, var_names = ['decay_time','precision'],aged_time='other'):
+def plot_pair(trace, n_time_scale = 1, var_names = ['decay_time','precision']):
     '''
     This function plots the posterior of sampling from the single or the multiple time scale model
     
@@ -213,9 +207,6 @@ def plot_pair(trace, n_time_scale = 1, var_names = ['decay_time','precision'],ag
     
     if n_time_scale == 2:
         var_names = ['decay_time_1', 'decay_time_2', 'precision']
-        
-    if aged_time=='7h_single' or aged_time=='24_single' or aged_time=='simulated':
-        var_names = ['decay_time_1', 'precision', 'noise_std']
     
     az.plot_pair(
     trace,
