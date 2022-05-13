@@ -1,6 +1,7 @@
 import numpy as np
 import pymc3 as pm
 import arviz as az
+import seaborn as sns
 
 
 def set_model(data,quantization,aged_time='other'):
@@ -110,7 +111,8 @@ def set_double_precision_model(data, quantization, aged_time='other'):
 
     with ar1_two_timescales_model:
         # 'phi'is ln(-1/tau) used in our generative model
-        decay_time1 = pm.Uniform("decay_time_1",lower = 0, upper = 500) 
+        #decay_time1 = pm.Uniform("decay_time_1",lower = 0, upper = 500) 
+        decay_time1 = pm.Exponential("decay_time_1", lam=1) 
         decay_time_split = pm.Uniform("decay_time_split",lower = 0, upper = 500)
         decay_time2 = pm.Deterministic("decay_time_2",decay_time1 + decay_time_split)
     
