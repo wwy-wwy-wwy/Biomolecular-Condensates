@@ -49,12 +49,14 @@ def simulate_double_decay_data(number_data_point,tau_1, tau_2, relative_var, qua
 
     phi1 = np.exp(-1/tau_1)
     innovation_std1 = intensity_std1*np.sqrt(1-phi1**2) # this is the standard deviation of the innovation 
+    print('precision 1 is {}'.format(1/innovation_std1/innovation_std1))
     ar1 = np.r_[1, -phi1] # add zero-lag and negate
     ma = np.r_[1] # add zero-lag
     X_statsmodel_generated1 = sm.tsa.arma_generate_sample(ar1, ma, number_data_point, scale=innovation_std1)
 
     phi2 = np.exp(-1/(tau_2))
     innovation_std2 = intensity_std2*np.sqrt(1-phi2**2) # this is the standard deviation of the innovation 
+    print('precision 2 is {}'.format(1/innovation_std2/innovation_std2))
     ar2 = np.r_[1, -phi2] # add zero-lag and negate
     ma = np.r_[1] # add zero-lag
     X_statsmodel_generated2 = sm.tsa.arma_generate_sample(ar2, ma, number_data_point, scale=innovation_std2)
