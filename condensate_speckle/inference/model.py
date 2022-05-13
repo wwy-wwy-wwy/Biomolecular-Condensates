@@ -91,7 +91,7 @@ def set_single_precision_model(data,quantization,aged_time='other'):
         
     return ar1_new_model
 
-def set_double_scale_model(data, quantization):
+def set_double_precision_model(data, quantization,,aged_time='other'):
     '''
     This function read in the experiment data, and generate a two-timescale AR1 model based on it.
     
