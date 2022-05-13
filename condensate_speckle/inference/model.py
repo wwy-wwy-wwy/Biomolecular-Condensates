@@ -80,6 +80,7 @@ def set_single_precision_model(data,quantization):
         observed_mean = np.mean(data)   
         observed_mean = np.mean(data)
         camera_noise_std_mean = np.sqrt(data)
+        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
     
         true1 = pm.AR1("y_1", stationarity, tau_e=precision_AR1, shape=len(data))
         true2 = pm.AR1("y_2", stationarity2, tau_e=precision_AR1, shape=len(data))  
