@@ -51,7 +51,7 @@ class TestSimulation(TestCase):
         """
         simulated_data_double, simulated_t_double=simulate_double_decay_data(5000,3,300,0.5,255,80,40,8,3)
         real_mean = np.average(simulated_data_double)
-        assert (real_mean>80)
+        assert (real_mean>65 and real_mean<105)
 
 if __name__ == '__main__':
     unittest.main()
