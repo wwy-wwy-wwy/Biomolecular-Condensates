@@ -1,5 +1,5 @@
 from condensate_speckle.data_io import get_example_data_file_path,load_data
-from condensate_speckle.inference.model import set_model, set_single_precision_model, set_double_precision_model
+from condensate_speckle.inference.model import set_model, set_double_precision_model
 from condensate_speckle.inference.simulation import simulate_single_decay_data, simulate_double_decay_data
 import numpy as np
 
@@ -25,16 +25,7 @@ class TestModel(TestCase):
         estimate = pm.find_MAP(model = ar1_model)
         #assert np.allclose(estimate['decay_time'], 8, rtol=0, atol=1.1)
         self.assertTrue(isinstance(ar1_model, pm.Model))
-    
-    def test_single_precision_model(self):
-        """
-        reads in data and run in the set up model, checks if the function returns a pymc3 model.
-        """
-        data = load_data('[110, 145]_intensity.csv',data_dir='condensate_speckle/example_data').to_numpy()
-        quantization=255
-        ar1_model=set_single_precision_model(data[1,:],quantization)
-        self.assertTrue(isinstance(ar1_model, pm.Model))
-        
+
     def test_double_precision_model(self):
         """
         reads in data and run in the set up model, checks if the function returns a pymc3 model.
@@ -60,7 +51,7 @@ class TestSimulation(TestCase):
         """
         simulated_data_double, simulated_t_double=simulate_double_decay_data(5000,3,300,0.5,255,80,40,8,3)
         real_mean = np.average(simulated_data_double)
-        assert (real_mean>75 and real_mean<90)
+        assert (real_mean>80)
 
 if __name__ == '__main__':
     unittest.main()
