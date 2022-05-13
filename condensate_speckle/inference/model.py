@@ -127,7 +127,7 @@ def set_double_precision_model(data, quantization, aged_time='other'):
         
         #camera_noise_std=8.787413879857576
         #camera_noise_std = pm.Uniform("noise_std", lower=0, upper=quantization)
-        camera_noise_std_mean = np.sqrt(data)/5
+        camera_noise_std = np.sqrt(data)/5
         #camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
         if aged_time=='simulated':
             camera_noise_std=3
