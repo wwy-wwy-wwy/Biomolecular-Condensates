@@ -26,11 +26,11 @@ def set_model(data,quantization,aged_time):
         observed_mean = np.mean(data)
         if aged_time=='2h':
             decay_time = pm.Exponential("decay_time", lam=1) 
-            camera_noise_std_mean = np.sqrt(data)
+            camera_noise_std = np.sqrt(data)/5
         else:
             decay_time = pm.Uniform("decay_time", lower=0,upper=1.5*len(data)) 
-            camera_noise_std_mean = np.sqrt(observed_mean)*0.71
-            camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+            
+            camera_noise_std = pm.Uniform("noise_std", lower=0,upper = quantization)
             
         stationarity = pm.Deterministic("stationarity", np.exp(-1/decay_time))
 
@@ -38,7 +38,7 @@ def set_model(data,quantization,aged_time):
         precision_AR1 = pm.Uniform("precision", lower = 0 , upper = 10) 
     
         true = pm.AR1("y", k=stationarity, tau_e=precision_AR1, shape=len(data))
-        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std_mean, observed=data)
+        likelihood = pm.Normal("likelihood", mu=(true + observed_mean), sigma=camera_noise_std, observed=data)
         
 
     return ar1_model
