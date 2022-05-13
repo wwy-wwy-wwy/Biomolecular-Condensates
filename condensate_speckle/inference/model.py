@@ -78,14 +78,13 @@ def set_single_precision_model(data,quantization):
         # process mean: use observed mean since process is assumed to be stationary, and there should be
         # weak correlation with the other parameters anyway
         observed_mean = np.mean(data)   
-        observed_mean = np.mean(data)
-        camera_noise_std_mean = np.sqrt(data)
-        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+        camera_noise_std = np.sqrt(data)/5
+        #camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
     
         true1 = pm.AR1("y_1", stationarity, tau_e=precision_AR1, shape=len(data))
         true2 = pm.AR1("y_2", stationarity2, tau_e=precision_AR1, shape=len(data))  
     
-        likelihood = pm.Normal("likelihood", mu=(true1 + true2 + observed_mean), sigma=camera_noise_std_mean, observed=data)
+        likelihood = pm.Normal("likelihood", mu=(true1 + true2 + observed_mean), sigma=camera_noise_std, observed=data)
         
     return ar1_new_model
 
@@ -125,8 +124,8 @@ def set_double_scale_model(data, quantization):
         
         #camera_noise_std=8.787413879857576
         #camera_noise_std = pm.Uniform("noise_std", lower=0, upper=quantization)
-        camera_noise_std_mean = np.sqrt(observed_mean)*0.71
-        camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
+        camera_noise_std_mean = np.sqrt(data)/5
+        #camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
     
         true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
         true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
