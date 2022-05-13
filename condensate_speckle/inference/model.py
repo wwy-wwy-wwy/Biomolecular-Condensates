@@ -127,7 +127,7 @@ def set_double_scale_model(data, quantization):
         #camera_noise_std = pm.Uniform("noise_std", lower=0, upper=quantization)
         #camera_noise_std_mean = np.sqrt(observed_mean)*0.71
         #camera_noise_std = pm.TruncatedNormal("noise_std", mu=camera_noise_std_mean, sigma=5,lower=0)
-        camera_noise_std = np.sqrt(observed_mean)/5
+        camera_noise_std = np.sqrt(data)/5
     
         true1 = pm.AR1("y1", k=stationarity1, tau_e=precision_1, shape=len(data))
         true2 = pm.AR1("y2", k=stationarity2, tau_e=precision_2, shape=len(data))
