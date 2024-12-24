@@ -1,6 +1,4 @@
-# Condensate Speckle
-
-### Anqi Chen, Wenyun Wang, Hanyue Wang
+# Biomolecular condensates
 
 This package is designed to characterize the local motion of FUS protein condensate by extracting local decay constants out of intensity flucutation. This packaged uses AR(1) model to infer decay times. For primary goal, we are inferring single decay time and precision. For the 'can do' goal, we extract two decay timescales to probe the co-existence of liquid and gel phase.
 
